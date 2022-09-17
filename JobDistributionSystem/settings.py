@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'top',
 ]
 
 MIDDLEWARE = [
@@ -47,6 +48,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'top.middleware.auth.LoginRequiredMiddleware',
+    'global_login_required.GlobalLoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'JobDistributionSystem.urls'
@@ -122,3 +125,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ログイン関係
+LOGIN_URL = 'top:login'  # ログインページ
+LOGIN_REDIRECT_URL = 'top:index'  # ログイン終了後、ここに飛ぶ
+PUBLIC_PATHS = [
+    '/login',
+    '/logout',
+    '/admin',
+]
