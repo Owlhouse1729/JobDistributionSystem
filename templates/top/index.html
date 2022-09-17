@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>シフト割り振り</title>
+</head>
+<body>
+
+<h1>トップページです</h1>
+{% if user.is_authenticated %}
+    <h1>ログインしてるねぇ...</h1>
+{% endif %}
+
+<form action='{% url "top:login" %}'>
+    <input type="submit" value="ログインページに移行">
+</form>
+
+<form action='{% url "top:logout" %}'>
+    <input type="submit" value="ログアウト">
+</form>
+
+</body>
+</html>
