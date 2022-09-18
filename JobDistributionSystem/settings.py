@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'top',
+    'shift',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,4 @@ PUBLIC_PATHS = [
     '/logout',
     '/admin',
 ]
+AUTH_USER_MODEL = 'top.User'

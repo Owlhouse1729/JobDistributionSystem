@@ -19,5 +19,15 @@
     <input type="submit" value="ログアウト">
 </form>
 
+{% if user.is_employer %}
+<form action='{% url "top:edit" %}'>
+    <input type="submit" value="ユーザ情報の登録と変更">
+</form>
+{% endif %}
+
+<form action='{% url "shift:index" %}'>
+    <input type="submit" value="シフト確認">
+</form>
+
 </body>
 </html>

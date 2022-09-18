@@ -23,6 +23,7 @@
 --- 参照( https://blog.narito.ninja/detail/11 )
 - ユーザー認証
 --- 参照( https://blog.narito.ninja/detail/38/ )
+--- 管理者exclusive (https://itc.tokyo/django/userpassestestmixin/)
 - 手動/自動共存のアルゴリズム
 
 
