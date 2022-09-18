@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>シフト確認</title>
+</head>
+<body>
+
+<h2>日付: {{ master_shift.date }}</h2>
+
+{% for personal in personal_shifts %}
+    {{ personal.owner }}
+{% endfor %}
+
+
+</body>
+</html>

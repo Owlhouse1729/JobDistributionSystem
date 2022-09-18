@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{{ user.username }} の UpdatePage
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="更新">
+</form>
+
+<form action="{% url 'top:edit' %}">
+    <input type="submit" value="戻る">
+</form>
+
+
+</body>
+</html>

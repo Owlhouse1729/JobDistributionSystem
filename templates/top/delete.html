@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form method="post">
+    {% csrf_token %}
+    <p>{{ object.username }}を削除しますか？</p>
+    <input type="submit" value="削除する">
+</form>
+
+<form action="{% url 'top:edit' %}">
+    <input type="submit" value="戻る">
+</form>
+</body>
+</html>

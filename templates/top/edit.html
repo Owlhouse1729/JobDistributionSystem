@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ユーザー編集</title>
+</head>
+<body>
+
+現在ログイン中: {{ user }}
+
+<h1>現在の従業員</h1>
+<table>
+    <tr>
+        <th>name</th>
+        <th>編集</th>
+        <th>削除</th>
+    </tr>
+{% for employee in employees %}
+    <tr>
+        <td>{{ employee.username }}</td>
+        <th><a href="{% url 'top:update' employee.pk %}">編集</a></th>
+        <th><a href="{% url 'top:delete' employee.pk %}">削除</a></th>
+    </tr>
+{% endfor %}
+</table>
+
+<h1>現在の管理者</h1>
+<table>
+    <tr>
+        <th>name</th>
+        <th>編集</th>
+        <th>削除</th>
+    </tr>
+{% for employer in employers %}
+    <tr>
+        <td>{{ employer.username }}</td>
+        <th><a href="{% url 'top:update' employer.pk %}">編集</a></th>
+        <th><a href="{% url 'top:delete' employer.pk %}">削除</a></th>
+    </tr>
+{% endfor %}
+</table>
+
+<form action='{% url 'top:register' %}'>
+    <input type="submit" value="ユーザーの登録">
+</form>
+
+
+<form action="{% url 'top:index' %}">
+    <input type="submit" value="トップに戻る">
+</form>
+
+</body>
+</html>
