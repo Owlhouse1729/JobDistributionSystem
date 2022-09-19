@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import *
+from top.models import User
+from top.mixins import OnlyEmployerMixin
 from .models import MasterShift, PersonalShift
 
 
@@ -15,7 +17,8 @@ class Index(TemplateView):
         return context
 
 
-class Employer(TemplateView):
+class Employer(OnlyEmployerMixin, MonthWithShiftsMixin, TableGeneratorMixin, TemplateView):
+    model = User
     template_name = 'shift/employer.html'
 
 

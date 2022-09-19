@@ -33,3 +33,9 @@ EmployerMIN - worker0917
 220918メモ
 WorKMN - Worker0918
 test_employer - employer0918
+
+KZTメモ
+「従業員A, B, Cはシフト希望を提出していません」というメッセージをshiftの雇用者用ページに出したい。
+→新たにSubmittedOrNotクラスをmodelsあたりに作成し、それで「提出したかどうか」を管理する？
+    →それよりは月ごとにオブジェクトが生成されるShiftCalendarクラスを作成してそこにFieldとして提出の有無を入れた方がよさそう。
+→シフトが全てFalseである人について「全部Falseですよー」と表示するだけでいい
