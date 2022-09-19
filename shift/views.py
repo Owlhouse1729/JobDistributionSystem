@@ -18,16 +18,26 @@ class Index(MonthWithShiftsMixin, TemplateView):
         return context
 
 
-class Employer(OnlyEmployerMixin, MonthWithShiftsMixin, TableGeneratorMixin, TemplateView):
-    model = User
+class Employer(OnlyEmployerMixin, TableGeneratorMixin, TemplateView):
     template_name = 'shift/employer.html'
+    model = User
+    date_field = 'date'
 
-    def get(self, request, *args, **kwargs):
-        return render(request, template_name=self.template_name)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        calendar_context = self.get_month_calendar()
+        context.update(calendar_context)
+        return context
+
+    """def get(self, request, *args, **kwargs):
+        params = {'kwargs': {'year': 2002, 'month': 1}}
+        return render(request, template_name=self.template_name, context=params)"""
 
     def post(self, request, *args, **kwargs):
+        print('request', request.POST)
+        print('kwargs', kwargs)
         if request.POST.get('generate'):
-            super().generate()
+            self.generate(self.get_current_month())
         return redirect('shift:employer')
 
 

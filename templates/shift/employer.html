@@ -22,9 +22,9 @@
     }
 
 </style>
-<a href="{% url 'shift:index' month_previous.year month_previous.month %}">前月</a>
+<a href="{% url 'shift:employer' month_previous.year month_previous.month %}">前月</a>
 {{ month_current | date:"Y年m月" }}
-<a href="{% url 'shift:index' month_next.year month_next.month %}">次月</a>
+<a href="{% url 'shift:employer' month_next.year month_next.month %}">次月</a>
 
 <table class="table">
     <thead>
@@ -49,9 +49,7 @@
                     {{ day | date:"m/d" }}
                 {% else %}
                     {{ day.day }}
-                {% endif %}
-
-                {% for shift in week_shifts %}
+                    {% for shift in week_shifts %}
                     {% for master_shift in shift %}
                         {% if master_shift.is_am %}
                             <p>AM: {{ master_shift.worker.username }}</p>
@@ -62,7 +60,10 @@
                             <p>PM: {{ master_shift.worker.username }}</p>
                         {% endif %}
                     {% endfor %}
-                {% endfor %}
+                    {% endfor %}
+                {% endif %}
+
+
             </div>
             </td>
             {% endfor %}
@@ -71,9 +72,17 @@
     </tbody>
 </table>
 
-<form action="" method="post" name="generate">
+<form action="" method="post">
     {% csrf_token %}
-    <input type="submit" value="シフトの生成">
+    <input type="submit" value="シフトの生成" name="generate">
+</form>
+
+<form action='{% url 'shift:employer' now.year now.month %}'>
+    <input type="submit" value="今月({{ now.month }}月)へ戻る">
+</form>
+
+<form action="{% url 'shift:index' month_current.year month_current.month  %}">
+    <input type="submit" value="シフト確認へ戻る">
 </form>
 
 </body>

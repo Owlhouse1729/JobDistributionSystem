@@ -68,12 +68,20 @@
 
 
 
-<form action='{% url 'shift:employer' %}'>
+<form action='{% url 'shift:employer' month_current.year month_current.month %}'>
     <input type="submit" value="雇用者用画面へ移行">
 </form>
 
 <form action='{% url 'shift:employee' %}'>
     <input type="submit" value="被雇用者用画面へ移行">
+</form>
+
+<form action='{% url 'shift:index' now.year now.month %}'>
+    <input type="submit" value="今月({{ now.month }}月)へ戻る">
+</form>
+
+<form action='{% url 'top:index' %}'>
+    <input type="submit" value="topへ戻る">
 </form>
 
 </body>

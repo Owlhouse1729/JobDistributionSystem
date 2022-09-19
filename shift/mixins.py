@@ -20,7 +20,6 @@ class BaseCalendarMixin:
 
 
 class MonthCalendarMixin(BaseCalendarMixin):
-
     def get_previous_month(self, date):
         """前月を返す"""
         if date.month == 1:
@@ -41,17 +40,20 @@ class MonthCalendarMixin(BaseCalendarMixin):
 
     def get_current_month(self):
         """現在の月を返す"""
+        self.setup_calendar()
         month = self.kwargs.get('month')
         year = self.kwargs.get('year')
         if month and year:
             month = datetime.date(year=int(year), month=int(month), day=1)
+            print('kwargsもyもmもあったので正常ッピ', month)
         else:
             month = datetime.date.today().replace(day=1)
+            print("kwargsはあるけどyかmがありませんので", month)
         return month
 
     def get_month_calendar(self):
         """月間カレンダー情報の入った辞書を返す"""
-        self.setup_calendar()
+        # self.setup_calendar()
         current_month = self.get_current_month()
         calendar_data = {
             'now': datetime.date.today(),
@@ -68,25 +70,6 @@ class MonthWithShiftsMixin(MonthCalendarMixin):
     """スケジュール付きの、月間カレンダーを提供するMixin"""
 
     def get_month_schedules(self, start, end, days):
-        """それぞれの日とスケジュールを返す"""
-        """lookup = {
-            # '例えば、date__range: (1日, 31日)'を動的に作る
-            '{}__range'.format(self.date_field): (start, end)
-        }
-        # 例えば、Schedule.objects.filter(date__range=(1日, 31日)) になる
-        queryset = self.MasterShift.objects.filter(**lookup)
-
-        # {1日のdatetime: 1日のスケジュール全て, 2日のdatetime: 2日の全て...}のような辞書を作る
-        day_schedules = {day: [] for week in days for day in week}
-        for schedule in queryset:
-            schedule_date = getattr(schedule, self.date_field)
-            day_schedules[schedule_date].append(schedule)
-
-        # day_schedules辞書を、周毎に分割する。[{1日: 1日のスケジュール...}, {8日: 8日のスケジュール...}, ...]
-        # 7個ずつ取り出して分割しています。
-        size = len(day_schedules)
-        return [{key: day_schedules[key] for key in itertools.islice(day_schedules, i, i+7)} for i in range(0, size, 7)]
-        """
         # shifts = {2022-9-19:[AMのシフト, PMのシフト], 2022-9-20:[AMのシフト, PMのシフト], .... }
         shifts = {day: [MasterShift.objects.filter(date__range=(start, end)).filter(date=day.strftime('%Y-%m-%d'))] for week in days for day in week}
         size = len(shifts)
@@ -98,36 +81,32 @@ class MonthWithShiftsMixin(MonthCalendarMixin):
         month_first = month_days[0][0]
         month_last = month_days[-1][-1]
         calendar_context['shifts'] = self.get_month_schedules(month_first, month_last, month_days)
-        for week_day_shifts in (calendar_context['shifts']):
-            print(week_day_shifts)
-            for day, week_shift in week_day_shifts.items():
-                print(' ', day)
-                for shift in week_shift:
-                    print('  ', shift)
-                    for master_shift in shift:
-                        print('    ', master_shift.worker.username)
         return calendar_context
 
 
-class TableGeneratorMixin(MonthCalendarMixin):
-    def is_generated(self):
-        self.year = super().get_current_month().year
-        self.month = super().get_current_month().month
-        if ShiftTable.objects.filter(year=self.year).filter(month=self.month):
+class TableGeneratorMixin(MonthWithShiftsMixin):
+    def is_generated(self, date):
+        """views.EmployerはTemplateViewより先にTableGeneratorMixinが継承されるので、
+        このクラスのコードが実行されるときにはまだkwargsがなく、参照できないため、
+        get_current_monthは使わず、メソッドにdate引数を設けるべし"""
+        if ShiftTable.objects.filter(year=date.year).filter(month=date.month).exists():
+            print('テーブルがあります')
             return True
+        print('テーブルがありません')
         return False
 
-    def generate(self):
-        if not self.is_generated():
-            ShiftTable.objects.create(year=self.year, month=self.month)
-            generated_table = ShiftTable.objects.get(year=self.year, month=self.month)
-            for week in super().get_month_days(super().get_current_month()):
+    def generate(self, date):
+        if not self.is_generated(date):
+            ShiftTable.objects.create(year=date.year, month=date.month)
+            generated_table = ShiftTable.objects.get(year=date.year, month=date.month)
+            print(self.get_month_days(date))
+            for week in self.get_month_days(date):
+                print('week', week)
                 for day in week:
-                    MasterShift.objects.create(shift_table=generated_table, date=day, is_am=True)
-                    MasterShift.objects.create(shift_table=generated_table, date=day, is_am=False)
-                    for user in User.objects.filter(is_employer=False):
-                        for master in MasterShift.objects.filter(date=day):
-                            PersonalShift.objects.create(master=master, owner=user)
-
-
-
+                    print('day', day)
+                    if date.month == day.month:
+                        MasterShift.objects.create(shift_table=generated_table, date=day, is_am=True, required=False)
+                        MasterShift.objects.create(shift_table=generated_table, date=day, is_am=False, required=True)
+                        for user in User.objects.filter(is_employer=False):
+                            for master in MasterShift.objects.filter(date=day):
+                                PersonalShift.objects.create(master=master, owner=user)

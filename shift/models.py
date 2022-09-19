@@ -9,7 +9,7 @@ class ShiftTable(models.Model):  # 追加
 
 # シフト
 class MasterShift(models.Model):
-    shift_table = models.ForeignKey(ShiftTable, on_delete=models.CASCADE)  # 追加
+    shift_table = models.ForeignKey(ShiftTable, on_delete=models.CASCADE, null=True, blank=True)  # 追加
     date = models.DateField()
     is_am = models.BooleanField()
     required = models.BooleanField()
