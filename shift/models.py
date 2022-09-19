@@ -2,8 +2,14 @@ from django.db import models
 from top.models import User
 
 
+class ShiftTable(models.Model):  # 追加
+    year = models.IntegerField()
+    month = models.IntegerField()
+
+
 # シフト
 class MasterShift(models.Model):
+    shift_table = models.ForeignKey(ShiftTable, on_delete=models.CASCADE)  # 追加
     date = models.DateField()
     is_am = models.BooleanField()
     required = models.BooleanField()

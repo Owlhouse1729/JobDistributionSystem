@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import MasterShift, PersonalShift
+from .models import MasterShift, PersonalShift, ShiftTable
 
 # Register your models here.
 admin.site.register(MasterShift)
