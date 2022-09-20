@@ -88,7 +88,7 @@
     <input type="submit" value="雇用者用画面へ移行">
 </form>
 
-<form action='{% url 'shift:employee' %}'>
+<form action='{% url 'shift:employee' month_current.year month_current.month%}'>
     <input type="submit" value="被雇用者用画面へ移行">
 </form>
 

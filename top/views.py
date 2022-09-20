@@ -5,6 +5,7 @@ from .form import LoginForm, RegisterForm
 from django.urls import reverse_lazy
 from .models import User
 from .mixins import OnlyEmployerMixin
+from shift.models import MasterShift, PersonalShift
 
 
 # Create your views here.
@@ -30,6 +31,8 @@ class Register(CreateView):
     def form_valid(self, form):
         user = form.save(commit=False)
         user.save()
+        for master in MasterShift.objects.all():
+            PersonalShift.objects.create(master=master, owner=user)
         return redirect('top:edit')
 
 

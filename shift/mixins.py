@@ -3,7 +3,7 @@ import datetime
 import itertools
 import random
 from collections import deque
-from .models import MasterShift, PersonalShift, ShiftTable, MonthlyWorker
+from .models import MasterShift, PersonalShift, ShiftTable
 from top.models import User
 
 
@@ -46,10 +46,10 @@ class MonthCalendarMixin(BaseCalendarMixin):
         year = self.kwargs.get('year')
         if month and year:
             month = datetime.date(year=int(year), month=int(month), day=1)
-            print('kwargsもyもmもあったので正常ッピ', month)
+            # print('kwargsもyもmもあったので正常ッピ', month)
         else:
             month = datetime.date.today().replace(day=1)
-            print("kwargsはあるけどyかmがありませんので", month)
+            # print("kwargsはあるけどyかmがありませんので", month)
         return month
 
     def get_month_calendar(self):
@@ -77,24 +77,34 @@ class MonthWithShiftsMixin(MonthCalendarMixin):
         size = len(shifts)
         return [{key: shifts[key] for key in itertools.islice(shifts, i, i + 7)} for i in range(0, size, 7)]
 
+    def get_personal_schedules(self, start, end, days):
+        master_shifts = [master for week in days for day in week
+                         for master in MasterShift.objects.filter(date__range=(start, end), date=day.strftime('%Y-%m-%d'))]
+        # personal_shifts = {master_shifts : [p, p, p]}
+        personal_shifts = PersonalShift.objects.filter(master__in=master_shifts)
+        print(master_shifts)
+        print(personal_shifts)
+        return personal_shifts
+
     def get_month_calendar(self):
         calendar_context = super().get_month_calendar()
         month_days = calendar_context['month_days']
         month_first = month_days[0][0]
         month_last = month_days[-1][-1]
         calendar_context['shifts'] = self.get_month_schedules(month_first, month_last, month_days)
+        calendar_context['personal_shifts'] = self.get_personal_schedules(month_first, month_last, month_days)
         return calendar_context
 
 
 class TableGeneratorMixin(MonthWithShiftsMixin):
+
+    # 指定されたdate(YYYY-MM)のShiftTableが存在するかの判定
     def is_generated(self, date):
         """views.EmployerはTemplateViewより先にTableGeneratorMixinが継承されるので、
         このクラスのコードが実行されるときにはまだkwargsがなく、参照できないため、
         get_current_monthは使わず、メソッドにdate引数を設けるべし"""
         if ShiftTable.objects.filter(year=date.year).filter(month=date.month).exists():
-            print('テーブルがあります')
             return True
-        print('テーブルがありません')
         return False
 
     def generate(self, date):

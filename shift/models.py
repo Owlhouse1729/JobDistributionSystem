@@ -36,12 +36,3 @@ class PersonalShift(models.Model):
             return f'{self.master.date}_AM of {self.owner.username}'
         else:
             return f'{self.master.date}_PM of {self.owner.username}'
-
-
-class MonthlyWorker(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    shift_number = models.IntegerField(default=0)
-    table = models.ForeignKey(ShiftTable, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f'{self.user.username} of {self.month.year}/{self.month.month}'

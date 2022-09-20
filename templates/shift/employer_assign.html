@@ -7,7 +7,7 @@
 <body>
 
 <h1>
-    被雇用者 - Wish
+    雇用者 - Assign
 </h1>
 
 <style>
@@ -68,34 +68,18 @@
                                     <p>
                                         AM
                                         {% if master_shift.required %}
-                                            {% for personal_shift in personal_shifts %}
-                                                {% if personal_shift.master == master_shift %}
-                                                    {% if personal_shift.is_wanted %}
-                                                        <input type="checkbox" name="check[]" value="{{ personal_shift.pk }}" checked="checked">
-                                                    {% else %}
-                                                        <input type="checkbox" name="check[]" value="{{ personal_shift.pk }}">
-                                                    {% endif %}
-                                                {% endif %}
-                                            {% endfor %}
+                                            <input type="checkbox" name="check[]" value="{{ master_shift.pk }}" checked="checked">
                                         {% else %}
-                                            シフトなし
+                                            <input type="checkbox" name="check[]" value="{{ master_shift.pk }}">
                                         {% endif %}
                                     </p>
                                 {% else %}
                                     <p>
                                         PM
                                         {% if master_shift.required %}
-                                            {% for personal_shift in personal_shifts %}
-                                                {% if personal_shift.master == master_shift %}
-                                                    {% if personal_shift.is_wanted %}
-                                                        <input type="checkbox" name="check[]" value="{{ personal_shift.pk }}" checked="checked">
-                                                    {% else %}
-                                                        <input type="checkbox" name="check[]" value="{{ personal_shift.pk }}">
-                                                    {% endif %}
-                                                {% endif %}
-                                            {% endfor %}
+                                            <input type="checkbox" name="check[]" value="{{ master_shift.pk }}" checked="checked">
                                         {% else %}
-                                            シフトなし
+                                            <input type="checkbox" name="check[]" value="{{ master_shift.pk }}">
                                         {% endif %}
                                     </p>
                                 {% endif %}
@@ -116,12 +100,12 @@
 <input type="submit" name="confirm" value="Confirm Assign">
 </form>
 
-<form action='{% url 'shift:employee' now.year now.month %}'>
+<form action='{% url 'shift:assign' now.year now.month %}'>
     <input type="submit" value="今月({{ now.month }}月)へ戻る">
 </form>
 
-<form action='{% url 'shift:index' now.year now.month %}'>
-    <input type="submit" value="シフト確認へ戻る">
+<form action="{% url 'shift:employer' month_current.year month_current.month  %}">
+    <input type="submit" value="シフト割り振りに戻る">
 </form>
 
 </body>

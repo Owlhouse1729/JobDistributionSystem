@@ -32,10 +32,6 @@ class Employer(OnlyEmployerMixin, TableGeneratorMixin, TemplateView):
         })
         return context
 
-    """def get(self, request, *args, **kwargs):
-        params = {'kwargs': {'year': 2002, 'month': 1}}
-        return render(request, template_name=self.template_name, context=params)"""
-
     def post(self, request, *args, **kwargs):
         print('request', request.POST)
         print('kwargs', kwargs)
@@ -44,9 +40,47 @@ class Employer(OnlyEmployerMixin, TableGeneratorMixin, TemplateView):
         elif request.POST.get('allot'):
             self.allot(ShiftTable.objects.get(year=self.get_current_month().year,
                                               month=self.get_current_month().month))
+        elif request.POST.get('confirm'):
+            print('シフトの更新が行われました')
         return redirect('shift:employer', year=self.get_current_month().year, month=self.get_current_month().month)
 
+class EmployerAssign(Employer):
+    template_name = 'shift/employer_assign.html'
 
-class Employee(TemplateView):
-    template_name = "shift/employee.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
+    def post(self, request, *args, **kwargs):
+        print('request', request.POST)
+        print('kwargs', kwargs)
+        if request.POST.get('confirm'):
+            print('employeeが必要なシフトの更新を行いました')
+        return redirect('shift:assign', year=self.get_current_month().year, month=self.get_current_month().month)
+
+
+class Employee(Index):
+    template_name = 'shift/employee.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['personal_shifts'] = PersonalShift.objects.filter(owner=self.request.user)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        print('request', request.POST)
+        print('kwargs', kwargs)
+        if request.POST.get('confirm'):
+            # ログインしている人の、この月のテーブルのpersonal shift
+            print([int(pk) for pk in self.request.POST.getlist('check[]')])
+            for personal_shift in PersonalShift.objects.filter(owner=request.user,
+                                                               master__shift_table__month=self.get_current_month().month,
+                                                               master__shift_table__year=self.get_current_month().year):
+                if personal_shift.pk in [int(pk) for pk in self.request.POST.getlist('check[]')]:
+                    print('Trueにした:', personal_shift)
+                    personal_shift.is_wanted = True
+                else:
+                    personal_shift.is_wanted = False
+                    print('Falseにした:', personal_shift)
+                personal_shift.save()
+        return redirect('shift:employee', year=self.get_current_month().year, month=self.get_current_month().month)
