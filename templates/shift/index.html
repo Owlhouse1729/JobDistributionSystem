@@ -51,7 +51,11 @@
                         {% if master_shift.date.month == month_current.month %}
                             {% if master_shift.required %}
                                 {% if master_shift.is_am %}
-                                    <p>AM: {{ master_shift.worker.username }}</p>
+                                    {% if master_shift.worker %}
+                                        <p>AM: {{ master_shift.worker.username }}</p>
+                                    {% else %}
+                                        <p>AM: 担当者がいません</p>
+                                    {% endif %}
                                 {% endif %}
                             {% else %}
                                 {% if master_shift.is_am %}
@@ -63,9 +67,11 @@
                     {% for master_shift in shift %}
                         {% if master_shift.date.month == month_current.month %}
                             {% if master_shift.required %}
-                                {% if not master_shift.is_am %}
-                                    <p>PM: {{ master_shift.worker.username }}</p>
-                                {% endif %}
+                                {% if master_shift.worker %}
+                                        <p>PM: {{ master_shift.worker.username }}</p>
+                                    {% else %}
+                                        <p>PM: 担当者がいません</p>
+                                    {% endif %}
                             {% else %}
                                 {% if not master_shift.is_am %}
                                     <p>---</p>

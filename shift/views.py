@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import *
 from top.models import User
 from top.mixins import OnlyEmployerMixin
-from .models import MasterShift, PersonalShift, ShiftTable
+from .models import MasterShift, ShiftTable, PersonalShift
 from .mixins import MonthWithShiftsMixin, TableGeneratorMixin
 
 
@@ -28,7 +28,7 @@ class Employer(OnlyEmployerMixin, TableGeneratorMixin, TemplateView):
         calendar_context = self.get_month_calendar()
         context.update(calendar_context)
         context.update({
-            'generate_status': self.is_generated(self.get_current_month())
+            'generate_status': self.is_generated(self.get_current_month()),
         })
         return context
 
@@ -43,6 +43,7 @@ class Employer(OnlyEmployerMixin, TableGeneratorMixin, TemplateView):
         elif request.POST.get('confirm'):
             print('シフトの更新が行われました')
         return redirect('shift:employer', year=self.get_current_month().year, month=self.get_current_month().month)
+
 
 class EmployerAssign(Employer):
     template_name = 'shift/employer_assign.html'

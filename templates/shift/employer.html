@@ -7,7 +7,7 @@
 <body>
 
 <h1>
-    雇用者用画面
+    雇用者 - Allot
 </h1>
 
 <style>
@@ -133,9 +133,7 @@
     {% csrf_token %}
     <input type="submit" value="シフトの生成" name="generate">
 </form>
-{% endif %}
-
-{% if generate_status %}
+{% else %}
 <form action="" method="post">
     {% csrf_token %}
     <input type="submit" value="シフトの自動割り振り" name="allot">
