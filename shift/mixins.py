@@ -1,8 +1,9 @@
 import calendar
 import datetime
 import itertools
+import random
 from collections import deque
-from .models import MasterShift, PersonalShift, ShiftTable
+from .models import MasterShift, PersonalShift, ShiftTable, MonthlyWorker
 from top.models import User
 
 
@@ -71,7 +72,8 @@ class MonthWithShiftsMixin(MonthCalendarMixin):
 
     def get_month_schedules(self, start, end, days):
         # shifts = {2022-9-19:[AMのシフト, PMのシフト], 2022-9-20:[AMのシフト, PMのシフト], .... }
-        shifts = {day: [MasterShift.objects.filter(date__range=(start, end)).filter(date=day.strftime('%Y-%m-%d'))] for week in days for day in week}
+        shifts = {day: [MasterShift.objects.filter(date__range=(start, end)).filter(date=day.strftime('%Y-%m-%d'))] for
+                  week in days for day in week}
         size = len(shifts)
         return [{key: shifts[key] for key in itertools.islice(shifts, i, i + 7)} for i in range(0, size, 7)]
 
@@ -105,8 +107,59 @@ class TableGeneratorMixin(MonthWithShiftsMixin):
                 for day in week:
                     print('day', day)
                     if date.month == day.month:
-                        MasterShift.objects.create(shift_table=generated_table, date=day, is_am=True, required=False)
+                        if day.weekday() in [5, 6]:
+                            MasterShift.objects.create(shift_table=generated_table, date=day, is_am=True, required=True)
+                        else:
+                            MasterShift.objects.create(shift_table=generated_table, date=day, is_am=True,
+                                                       required=False)
                         MasterShift.objects.create(shift_table=generated_table, date=day, is_am=False, required=True)
                         for user in User.objects.filter(is_employer=False):
                             for master in MasterShift.objects.filter(date=day):
                                 PersonalShift.objects.create(master=master, owner=user)
+
+    """def allot(self, table):
+        unmanned_shifts = []
+        for week in self.get_month_days(self.get_current_month()):
+            for day in week:
+                if day.month == table.month:
+                    try:
+                        unmanned_shifts.append(MasterShift.objects.get(date=day,
+                                                                       shift_table=table,
+                                                                       worker=None,
+                                                                       required=True,
+                                                                       is_am=True))
+                        unmanned_shifts.append(MasterShift.objects.get(date=day,
+                                                                       shift_table=table,
+                                                                       worker=None,
+                                                                       required=True,
+                                                                       is_am=False))
+                    except MasterShift.DoesNotExist:
+                        pass
+        for shift in unmanned_shifts:
+            available_workers = []
+            minimum_workers = []
+            for monthly_worker in MonthlyWorker.objects.get(table=table, is_employer=False):
+                volunteer = PersonalShift.objects.filter(master=shift, owner=monthly_worker, is_wanted=True).get()
+                if volunteer:
+                    available_workers.append([monthly_worker.user.username, monthly_worker.shift_number])
+            for available_worker in available_workers:
+                if available_worker[1] == min(available_workers[:][1]):
+                    minimum_workers.append(available_worker[0])
+            if len(minimum_workers) > 0:
+                shift.worker = random.choice(minimum_workers)
+                MonthlyWorker.objects.filter(worker=shift.worker).shift_number += 1"""
+
+    def allot(self, table):
+        # 引数に渡されたtableの中のMasterShiftのうち、従業員を募集したいシフト
+        masters = MasterShift.objects.filter(shift_table=table, required=True, worker=None)
+        for master in masters:
+            personal_shifts = PersonalShift.objects.filter(master=master, is_wanted=True)
+            # personal_dict = {mkazu: 今月3コマ, tkmn: 今月2コマ...} ただし、労働者はmasterに出勤できる者だけ
+            shift_count = {personal.owner: masters.filter(worker=personal.owner).count() for personal in personal_shifts}
+            if shift_count:
+                min_shift_count = min(shift_count.values())
+                candidates = [employee for employee in shift_count.keys() if shift_count[employee] == min_shift_count]
+                print('candidates', candidates)
+                chosen = random.choice(candidates)
+                master.worker = chosen
+                master.save()

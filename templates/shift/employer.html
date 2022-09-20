@@ -25,7 +25,6 @@
 <a href="{% url 'shift:employer' month_previous.year month_previous.month %}">前月</a>
 {{ month_current | date:"Y年m月" }}
 <a href="{% url 'shift:employer' month_next.year month_next.month %}">次月</a>
-
 <table class="table">
     <thead>
     <tr>
@@ -49,21 +48,36 @@
                     {{ day | date:"m/d" }}
                 {% else %}
                     {{ day.day }}
-                    {% for shift in week_shifts %}
-                    {% for master_shift in shift %}
-                        {% if master_shift.is_am %}
-                            <p>AM: {{ master_shift.worker.username }}</p>
-                        {% endif %}
-                    {% endfor %}
-                    {% for master_shift in shift %}
-                        {% if not master_shift.is_am %}
-                            <p>PM: {{ master_shift.worker.username }}</p>
-                        {% endif %}
-                    {% endfor %}
-                    {% endfor %}
                 {% endif %}
 
-
+                {% for shift in week_shifts %}
+                    {% for master_shift in shift %}
+                        {% if master_shift.date.month == month_current.month %}
+                            {% if master_shift.required %}
+                                {% if master_shift.is_am %}
+                                    <p>AM: {{ master_shift.worker.username }}</p>
+                                {% endif %}
+                            {% else %}
+                                {% if master_shift.is_am %}
+                                    <p>---</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% for master_shift in shift %}
+                        {% if master_shift.date.month == month_current.month %}
+                            {% if master_shift.required %}
+                                {% if not master_shift.is_am %}
+                                    <p>PM: {{ master_shift.worker.username }}</p>
+                                {% endif %}
+                            {% else %}
+                                {% if not master_shift.is_am %}
+                                    <p>---</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
             </div>
             </td>
             {% endfor %}
@@ -72,10 +86,20 @@
     </tbody>
 </table>
 
+{% if not generate_status %}
 <form action="" method="post">
     {% csrf_token %}
     <input type="submit" value="シフトの生成" name="generate">
 </form>
+{% endif %}
+
+{% if generate_status %}
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="submit" value="シフトの自動割り振り" name="allot">
+</form>
+{% endif %}
+
 
 <form action='{% url 'shift:employer' now.year now.month %}'>
     <input type="submit" value="今月({{ now.month }}月)へ戻る">
