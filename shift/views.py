@@ -15,6 +15,9 @@ class Index(MonthWithShiftsMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         calendar_context = self.get_month_calendar()
         context.update(calendar_context)
+        context.update({
+            'user': self.request.user
+        })
         return context
 
 
@@ -84,4 +87,5 @@ class Employee(Index):
                     personal_shift.is_wanted = False
                     print('Falseにした:', personal_shift)
                 personal_shift.save()
+            return redirect('shift:index', year=self.get_current_month().year, month=self.get_current_month().month)
         return redirect('shift:employee', year=self.get_current_month().year, month=self.get_current_month().month)

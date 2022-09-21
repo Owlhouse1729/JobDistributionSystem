@@ -88,15 +88,15 @@
     </tbody>
 </table>
 
-
-
-<form action='{% url 'shift:employer' month_current.year month_current.month %}'>
-    <input type="submit" value="雇用者用画面へ移行">
-</form>
-
-<form action='{% url 'shift:employee' month_current.year month_current.month%}'>
-    <input type="submit" value="被雇用者用画面へ移行">
-</form>
+{% if user.is_employer %}
+    <form action='{% url 'shift:employer' month_current.year month_current.month %}'>
+        <input type="submit" value="雇用者用設定画面へ移行">
+    </form>
+{% else %}
+    <form action='{% url 'shift:employee' month_current.year month_current.month%}'>
+        <input type="submit" value="被雇用者用設定画面へ移行">
+    </form>
+{% endif %}
 
 <form action='{% url 'shift:index' now.year now.month %}'>
     <input type="submit" value="今月({{ now.month }}月)へ戻る">
