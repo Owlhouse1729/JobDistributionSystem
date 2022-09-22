@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>
+    Debug Mode <br>
+    superaccountでログイン中: {{ user }} <br>
+    表示画面を選択中: {{ selected_username }}
+</h1>
+
+選択されたuser:
+<form method="post">
+    {% csrf_token %}
+    <select name="user[]">
+        <option value={{ user.username }}>{{ user.username }}</option>
+        {% for user_candidate in all_users %}
+            {% if user_candidate.is_superuser %}
+            {% elif user_candidate.is_employer %}
+                <option value={{ user_candidate }}>
+                    {{ user_candidate.username }}: 雇用者
+                </option>
+            {% else %}
+                <option value={{ user_candidate }}>
+                    {{ user_candidate.username }}: 従業員
+                </option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    <input type="submit" name="select_user" value="UserのConfirm">
+</form>
+
+{% if selected_userobject.is_superuser %}
+    <h1>
+    現在superuser: {{ user.username }} でDebug中。上のプルダウンからUserを選択してください。
+    </h1>
+{% elif selected_userobject.is_employer  %}
+
+<p>
+<style>
+    table {
+        table-layout: fixed;
+    }
+
+    td > div {
+        height: 100px;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+</style>
+<a href="{% url 'shift:debug' selected_username month_previous.year month_previous.month %}">前月</a>
+{{ month_current | date:"Y年m月" }}
+<a href="{% url 'shift:debug' selected_username month_next.year month_next.month %}">次月</a>
+</p>
+
+<!-- カレンダーのフォーム -->
+<form method="post">
+{% csrf_token %}
+
+<!-- カレンダー本体 -->
+<table class="table">
+    <thead>
+    <tr>
+        {% for w in week_names %}
+            <th>{{ w }}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for week_day_shifts in shifts %}
+        <tr>
+            {% for day, week_shifts in week_day_shifts.items %}
+                {% if now == day %}
+                    <td class="table-success">
+                        {% else %}
+                    <td>
+                {% endif %}
+
+            <p>
+                <!-- カレンダーの表示 -->
+                {% if month_current.month != day.month %}
+                    {{ day | date:"m/d" }}
+                {% else %}
+
+                    <!-- 日付 -->
+                    <p>{{ day.day }}</p>
+
+                    <!-- シフト -->
+                    {% for shift in week_shifts %}
+                        {% for master_shift in shift|dictsortreversed:"is_am" %}
+                            {% if master_shift.date == day %}
+
+                                <!-- コマ -->
+                                {% if master_shift.is_am %}
+                                    <p>
+                                        AM
+                                        {% if master_shift.required %}
+                                            <select name="select[]">
+                                                <option value={{ null }} selected>未選択</option>
+                                                {% for personal_shift in personal_shifts %}
+                                                    {% if personal_shift.master == master_shift %}
+                                                        {% if personal_shift.is_wanted %}
+                                                            <option value={{ personal_shift.owner.username }}>
+                                                            {{ personal_shift.owner.username }} さん
+                                                            </option>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        {% else %}
+                                            シフトは不要
+                                        {% endif %}
+                                    </p>
+                                {% else %}
+                                    <p>
+                                        PM
+                                        {% if master_shift.required %}
+                                            <select name={{ master_shift.pk }}>
+                                                <option value="">未選択</option>
+                                                {% for personal_shift in personal_shifts %}
+                                                    {% if personal_shift.master == master_shift %}
+                                                        {% if personal_shift.is_wanted %}
+                                                            {% if master_shift.worker == personal_shift.owner %}
+                                                                <option value={{ personal_shift.owner.username }} selected>
+                                                                {{ personal_shift.owner.username }} さん
+                                                                </option>
+                                                            {% else %}
+                                                                <option value={{ personal_shift.owner.username }}>
+                                                                {{ personal_shift.owner.username }} さん
+                                                                </option>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        {% else %}
+                                            シフトは不要
+                                        {% endif %}
+                                    </p>
+                                {% endif %}
+
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+
+                {% endif %}
+            </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+    <input type="submit" name="employer_confirm" value="シフト割り当てのConfirm">
+</form>
+
+{% if not generate_status %}
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="submit" value="シフトの生成" name="generate">
+</form>
+{% else %}
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="submit" value="シフトの自動割り振り" name="allot">
+</form>
+{% endif %}
+
+<form action='{% url 'shift:debug' selected_username now.year now.month %}'>
+    <input type="submit" value="今月({{ now.month }}月)へ戻る">
+</form>
+
+<form action="{% url 'shift:index' month_current.year month_current.month  %}">
+    <input type="submit" value="シフト確認へ戻る">
+</form>
+
+{% else %}
+
+<p>
+<style>
+    table {
+        table-layout: fixed;
+    }
+
+    td > div {
+        height: 100px;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+</style>
+<a href="{% url 'shift:debug' selected_username month_previous.year month_previous.month %}">前月</a>
+{{ month_current | date:"Y年m月" }}
+<a href="{% url 'shift:debug' selected_username month_next.year month_next.month %}">次月</a>
+</p>
+
+<!-- カレンダーのフォーム -->
+<form method="post">
+{% csrf_token %}
+
+<!-- カレンダー本体 -->
+<table class="table">
+    <thead>
+    <tr>
+        {% for w in week_names %}
+            <th>{{ w }}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for week_day_shifts in shifts %}
+        <tr>
+            {% for day, week_shifts in week_day_shifts.items %}
+                {% if now == day %}
+                    <td class="table-success">
+                        {% else %}
+                    <td>
+                {% endif %}
+
+            <p>
+                <!-- カレンダーの表示 -->
+                {% if month_current.month != day.month %}
+                    {{ day | date:"m/d" }}
+                {% else %}
+
+                    <!-- 日付 -->
+                    <p>{{ day.day }}</p>
+
+                    <!-- シフト -->
+                    {% for shift in week_shifts %}
+                        {% for master_shift in shift|dictsortreversed:"is_am" %}
+                            {% if master_shift.date == day %}
+
+                                <!-- コマ -->
+                                {% if master_shift.is_am %}
+                                    <p>
+                                        AM
+                                        {% if master_shift.required %}
+                                            {% for personal_shift in personal_shifts %}
+                                                {% if personal_shift.master == master_shift %}
+                                                    {% if personal_shift.is_wanted %}
+                                                        <input type="checkbox" name="check[]" value="{{ personal_shift.pk }}" checked="checked">
+                                                    {% else %}
+                                                        <input type="checkbox" name="check[]" value="{{ personal_shift.pk }}">
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            シフトなし
+                                        {% endif %}
+                                    </p>
+                                {% else %}
+                                    <p>
+                                        PM
+                                        {% if master_shift.required %}
+                                            {% for personal_shift in personal_shifts %}
+                                                {% if personal_shift.master == master_shift %}
+                                                    {% if personal_shift.is_wanted %}
+                                                        <input type="checkbox" name="check[]" value="{{ personal_shift.pk }}" checked="checked">
+                                                    {% else %}
+                                                        <input type="checkbox" name="check[]" value="{{ personal_shift.pk }}">
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            シフトなし
+                                        {% endif %}
+                                    </p>
+                                {% endif %}
+
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+            </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<input type="submit" name="employee_confirm" value="シフト希望のConfirm">
+</form>
+
+
+<form action='{% url 'shift:debug' selected_username now.year now.month %}'>
+    <input type="submit" value="今月({{ now.month }}月)へ戻る">
+</form>
+
+<form action="{% url 'shift:index' month_current.year month_current.month  %}">
+    <input type="submit" value="シフト確認へ戻る">
+</form>
+
+{% endif %}
+
+
+
+</body>
+</html>
