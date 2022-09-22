@@ -82,8 +82,8 @@ class MonthWithShiftsMixin(MonthCalendarMixin):
                          for master in MasterShift.objects.filter(date__range=(start, end), date=day.strftime('%Y-%m-%d'))]
         # personal_shifts = {master_shifts : [p, p, p]}
         personal_shifts = PersonalShift.objects.filter(master__in=master_shifts)
-        print(master_shifts)
-        print(personal_shifts)
+        # print(master_shifts)
+        # print(personal_shifts)
         return personal_shifts
 
     def get_month_calendar(self):
