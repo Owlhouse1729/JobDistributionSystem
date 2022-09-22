@@ -12,4 +12,6 @@ urlpatterns = [
     path('employer/<int:year>/<int:month>', views.Employer.as_view(), name='employer'),
     path('employee', views.Employee.as_view(), name='employee'),
     path('employee/<int:year>/<int:month>', views.Employee.as_view(), name='employee'),
+    # path('debug', views.Debug.as_view(), name='debug'),
+    # path('debug/<str:selected_username>/<int:year>/<int:month>', views.Debug.as_view(), name='debug'),
 ]

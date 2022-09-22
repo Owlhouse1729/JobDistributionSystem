@@ -26,8 +26,7 @@
 {{ month_current | date:"Y年m月" }}
 <a href="{% url 'shift:assign' month_next.year month_next.month %}">次月</a>
 
-<!-- カレンダーのフォーム -->
-<form method="post">
+<!-- カレンダーのフォーム --><form method="post">
 {% csrf_token %}
 
 <!-- カレンダー本体 -->
@@ -113,8 +112,9 @@
     </tbody>
 </table>
 
-<input type="submit" name="confirm" value="Confirm Assign">
+<input type="submit" name="confirm" value="シフト希望のConfirm">
 </form>
+
 
 <form action='{% url 'shift:employee' now.year now.month %}'>
     <input type="submit" value="今月({{ now.month }}月)へ戻る">

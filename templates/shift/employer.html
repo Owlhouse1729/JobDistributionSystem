@@ -68,14 +68,20 @@
                                     <p>
                                         AM
                                         {% if master_shift.required %}
-                                            <select name="select[]">
-                                                <option value={{ null }} selected>未選択</option>
+                                            <select name={{ master_shift.pk }}>
+                                                <option value="not_selected" selected>未選択</option>
                                                 {% for personal_shift in personal_shifts %}
                                                     {% if personal_shift.master == master_shift %}
                                                         {% if personal_shift.is_wanted %}
-                                                            <option value={{ personal_shift.owner.username }}>
-                                                            {{ personal_shift.owner.username }} さん
-                                                            </option>
+                                                            {% if master_shift.worker == personal_shift.owner %}
+                                                                <option value={{ personal_shift.owner.id }} selected>
+                                                                {{ personal_shift.owner.username }} さん
+                                                                </option>
+                                                            {% else %}
+                                                                <option value={{ personal_shift.owner.id }}>
+                                                                {{ personal_shift.owner.username }} さん
+                                                                </option>
+                                                            {% endif %}
                                                         {% endif %}
                                                     {% endif %}
                                                 {% endfor %}
@@ -117,7 +123,6 @@
                     {% endfor %}
 
                 {% endif %}
-            </div>
             </td>
             {% endfor %}
         </tr>
