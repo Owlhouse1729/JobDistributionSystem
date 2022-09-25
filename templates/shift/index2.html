@@ -1,34 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'top/base.html' %}
+{% block content %}
 
-<style>
-    table {
-        table-layout: fixed;
-    }
 
-    td > div {
-        height: 100px;
-        overflow: hidden;
-        white-space: nowrap;
-    }
-
-    .empty {
-        border-style: groove;
-        border-color: crimson;
-        border-width: medium;
-    }
-
-</style>
 <h1>いんでっくす　弐</h1>
-<a href="{% url 'shift:index' month_previous.year month_previous.month %}">前月</a>
-{{ month_current | date:"Y年m月" }}
-<a href="{% url 'shift:index' month_next.year month_next.month %}">次月</a>
-
+    <div class="container-fluid text-center col-6">
+        <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:index' month_previous.year month_previous.month %}" role="button">前月</a>
+            <span class="fs-1">{{ month_current | date:"Y年m月" }}</span>
+        <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:index' month_next.year month_next.month %}" role="button">次月</a>
+        <form action='{% url 'shift:index' now.year now.month %}'>
+            <input type="submit" class="btn btn-outline-primary" value="今月({{ now.month }}月)へ戻る">
+        </form>
+    </div>
 
 <!-- カレンダー本体 -->
 <table class="table">
@@ -71,7 +53,7 @@
                                                 {% if master_shift.worker %}
                                                     <p>AM: {{ master_shift.worker.username }}</p>
                                                 {% else %}
-                                                    <p class="empty">AM: 担当者がいません</p>
+                                                    <p class="red">AM: 担当者がいません</p>
                                                 {% endif %}
                                             {% endif %}
                                         {% else %}
@@ -86,7 +68,7 @@
                                                 {% if master_shift.worker %}
                                                     <p>PM: {{ master_shift.worker.username }}</p>
                                                 {% else %}
-                                                    <p class="empty">PM: 担当者がいません</p>
+                                                    <p class="red">PM: 担当者がいません</p>
                                                 {% endif %}
                                             {% endif %}
                                         {% else %}
@@ -116,13 +98,4 @@
     </form>
 {% endif %}
 
-<form action='{% url 'shift:index' now.year now.month %}'>
-    <input type="submit" value="今月({{ now.month }}月)へ戻る">
-</form>
-
-<form action='{% url 'top:index' %}'>
-    <input type="submit" value="topへ戻る">
-</form>
-
-</body>
-</html>
+{% endblock %}

@@ -11,8 +11,9 @@ from shift.models import MasterShift, PersonalShift
 # Create your views here.
 
 
-class Index(TemplateView):
-    template_name = 'top/index.html'
+class Index(View):
+    def get(self, request):
+        return redirect('shift:index')
 
 
 class Login(LoginView):
