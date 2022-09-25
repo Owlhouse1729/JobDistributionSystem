@@ -1,27 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'top/base.html' %}
 
-<h1>
-    雇用者 - Assign
-</h1>
+{% block content %}
 
-<style>
-    table {
-        table-layout: fixed;
-    }
-
-    td > div {
-        height: 100px;
-        overflow: hidden;
-        white-space: nowrap;
-    }
-
-</style>
 <a href="{% url 'shift:assign' month_previous.year month_previous.month %}">前月</a>
 {{ month_current | date:"Y年m月" }}
 <a href="{% url 'shift:assign' month_next.year month_next.month %}">次月</a>
@@ -108,5 +88,5 @@
     <input type="submit" value="シフト割り振りに戻る">
 </form>
 
-</body>
-</html>
+
+{% endblock %}
