@@ -30,6 +30,7 @@ class PersonalShift(models.Model):
     master = models.ForeignKey(MasterShift, on_delete=models.CASCADE)
     is_wanted = models.BooleanField(default=False)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner_of')
+    submitted = models.BooleanField(default=False)
 
     def __str__(self):
         if self.master.is_am:

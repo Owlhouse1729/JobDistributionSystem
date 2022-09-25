@@ -1,15 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ユーザー編集</title>
-</head>
-<body>
+{% extends 'top/base.html' %}
+
+{% block content %}
 
 現在ログイン中: {{ user }}
 
-<h1>現在の従業員</h1>
-<table>
+<p class="page-title">
+従業員の編集
+</p>
+
+
+<h2 style="text-align: center">現在の従業員</h2>
+<table class="edit">
     <tr>
         <th>name</th>
         <th>編集</th>
@@ -24,8 +25,8 @@
 {% endfor %}
 </table>
 
-<h1>現在の管理者</h1>
-<table>
+<h2 style="text-align: center">現在の管理者</h2>
+<table class="edit">
     <tr>
         <th>name</th>
         <th>編集</th>
@@ -40,14 +41,4 @@
 {% endfor %}
 </table>
 
-<form action='{% url 'top:register' %}'>
-    <input type="submit" value="ユーザーの登録">
-</form>
-
-
-<form action="{% url 'top:index' %}">
-    <input type="submit" value="トップに戻る">
-</form>
-
-</body>
-</html>
+{% endblock %}

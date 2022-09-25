@@ -1,31 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'top/base.html' %}
 
-<h1>
-    被雇用者 - Wish
-</h1>
+{% block content %}
 
-<style>
-    table {
-        table-layout: fixed;
-    }
-
-    td > div {
-        height: 100px;
-        overflow: hidden;
-        white-space: nowrap;
-    }
-
-</style>
-<a href="{% url 'shift:assign' month_previous.year month_previous.month %}">前月</a>
-{{ month_current | date:"Y年m月" }}
-<a href="{% url 'shift:assign' month_next.year month_next.month %}">次月</a>
-
+<div class="container-fluid text-center col-6">
+    <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:employee' month_previous.year month_previous.month %}" role="button">前月</a>
+    <span class="fs-1">{{ month_current | date:"Y年m月" }}</span>
+    <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:employee' month_next.year month_next.month %}" role="button">次月</a>
+    <form action='{% url 'shift:employer' now.year now.month %}'>
+        <input type="submit" class="btn btn-outline-primary" value="今月({{ now.month }}月)へ戻る">
+    </form>
+</div>
 <!-- カレンダーのフォーム --><form method="post">
 {% csrf_token %}
 
@@ -104,7 +88,6 @@
                     {% endfor %}
 
                 {% endif %}
-            </div>
             </td>
             {% endfor %}
         </tr>
@@ -115,14 +98,4 @@
 <input type="submit" name="confirm" value="シフト希望のConfirm">
 </form>
 
-
-<form action='{% url 'shift:employee' now.year now.month %}'>
-    <input type="submit" value="今月({{ now.month }}月)へ戻る">
-</form>
-
-<form action='{% url 'shift:index' now.year now.month %}'>
-    <input type="submit" value="シフト確認へ戻る">
-</form>
-
-</body>
-</html>
+{% endblock %}

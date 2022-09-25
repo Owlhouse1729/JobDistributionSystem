@@ -5,3 +5,26 @@
 .red {
     color:red;
 }
+
+.page-title {
+    font-size: 2rem;
+    margin-right: auto;
+    margin-left: auto;
+    width: fit-content;
+    text-decoration: underline;
+}
+
+.futodoki {
+    color: red;
+    font-size: 2rem;
+    margin-right: auto;
+    margin-left: auto;
+    width: fit-content;
+}
+
+.edit {
+    font-size: 1.25rem;
+    margin-right: auto;
+    margin-left: auto;
+    width: fit-content;
+}

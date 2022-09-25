@@ -1,16 +1,25 @@
 {% extends 'top/base.html' %}
 {% block content %}
 
+<p class="page-title">
+シフトの割り振り
+</p>
+
 {% if non_submitted_users %}
-    <h1>不届き者s:</h1>
+    <h2 style="text-align: center">シフト希望未提出:</h2>
     {% for non_submitted in non_submitted_users %}
-        <h1 class="red">{{ non_submitted }} さん</h1>
+        <p class="futodoki">{{ non_submitted }} さん</p>
     {% endfor %}
 {% endif %}
 
-<a href="{% url 'shift:employer' month_previous.year month_previous.month %}">前月</a>
-{{ month_current | date:"Y年m月" }}
-<a href="{% url 'shift:employer' month_next.year month_next.month %}">次月</a>
+<div class="container-fluid text-center col-6">
+    <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:employer' month_previous.year month_previous.month %}" role="button">前月</a>
+    <span class="fs-1">{{ month_current | date:"Y年m月" }}</span>
+    <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:employer' month_next.year month_next.month %}" role="button">次月</a>
+    <form action='{% url 'shift:employer' now.year now.month %}'>
+        <input type="submit" class="btn btn-outline-primary" value="今月({{ now.month }}月)へ戻る">
+    </form>
+</div>
 
 <!-- カレンダーのフォーム -->
 <form method="post">
@@ -119,29 +128,11 @@
 <input type="submit" name="confirm" value="シフトのConfirm">
 </form>
 
-{% if not generate_status %}
-<form action="" method="post">
-    {% csrf_token %}
-    <input type="submit" value="シフトの生成" name="generate">
-</form>
-{% else %}
+{% if generate_status %}
 <form action="" method="post">
     {% csrf_token %}
     <input type="submit" value="シフトの自動割り振り" name="allot">
 </form>
 {% endif %}
-
-
-<form action='{% url 'shift:employer' now.year now.month %}'>
-    <input type="submit" value="今月({{ now.month }}月)へ戻る">
-</form>
-
-<form action='{% url 'shift:assign' month_current.year month_current.month %}'>
-    <input type="submit" value="assignしに旅立つ">
-</form>
-
-<form action="{% url 'shift:index' month_current.year month_current.month  %}">
-    <input type="submit" value="シフト確認へ戻る">
-</form>
 
 {% endblock %}

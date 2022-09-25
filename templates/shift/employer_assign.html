@@ -2,9 +2,18 @@
 
 {% block content %}
 
-<a href="{% url 'shift:assign' month_previous.year month_previous.month %}">前月</a>
-{{ month_current | date:"Y年m月" }}
-<a href="{% url 'shift:assign' month_next.year month_next.month %}">次月</a>
+<p class="page-title">
+シフトの有効化
+</p>
+
+<div class="container-fluid text-center col-6">
+    <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:assign' month_previous.year month_previous.month %}" role="button">前月</a>
+    <span class="fs-1">{{ month_current | date:"Y年m月" }}</span>
+    <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:assign' month_next.year month_next.month %}" role="button">次月</a>
+    <form action='{% url 'shift:employer' now.year now.month %}'>
+        <input type="submit" class="btn btn-outline-primary" value="今月({{ now.month }}月)へ戻る">
+    </form>
+</div>
 
 <!-- カレンダーのフォーム -->
 <form method="post">
@@ -69,7 +78,6 @@
                     {% endfor %}
 
                 {% endif %}
-            </div>
             </td>
             {% endfor %}
         </tr>
@@ -80,13 +88,13 @@
 <input type="submit" name="confirm" value="Confirm Assign">
 </form>
 
-<form action='{% url 'shift:assign' now.year now.month %}'>
-    <input type="submit" value="今月({{ now.month }}月)へ戻る">
+{% if not generate_status %}
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="submit" value="シフトの生成" name="generate">
 </form>
+{% endif %}
 
-<form action="{% url 'shift:employer' month_current.year month_current.month  %}">
-    <input type="submit" value="シフト割り振りに戻る">
-</form>
 
 
 {% endblock %}

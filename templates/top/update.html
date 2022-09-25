@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'top/base.html' %}
 
-{{ user.username }} の UpdatePage
+{% block content %}
+
+<p class="page-title">
+    {{ user.username }} の 編集用ページ
+</p>
 
 <form method="post">
     {% csrf_token %}
@@ -14,10 +12,4 @@
     <input type="submit" value="更新">
 </form>
 
-<form action="{% url 'top:edit' %}">
-    <input type="submit" value="戻る">
-</form>
-
-
-</body>
-</html>
+{% endblock %}

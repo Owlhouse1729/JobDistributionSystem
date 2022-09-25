@@ -1,16 +1,18 @@
 {% extends 'top/base.html' %}
 {% block content %}
 
+<p class="page-title">
+トップページ
+</p>
 
-<h1>いんでっくす　弐</h1>
-    <div class="container-fluid text-center col-6">
-        <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:index' month_previous.year month_previous.month %}" role="button">前月</a>
-            <span class="fs-1">{{ month_current | date:"Y年m月" }}</span>
-        <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:index' month_next.year month_next.month %}" role="button">次月</a>
-        <form action='{% url 'shift:index' now.year now.month %}'>
-            <input type="submit" class="btn btn-outline-primary" value="今月({{ now.month }}月)へ戻る">
-        </form>
-    </div>
+<div class="container-fluid text-center col-6">
+    <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:index' month_previous.year month_previous.month %}" role="button">前月</a>
+        <span class="fs-1">{{ month_current | date:"Y年m月" }}</span>
+    <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:index' month_next.year month_next.month %}" role="button">次月</a>
+    <form action='{% url 'shift:index' now.year now.month %}'>
+        <input type="submit" class="btn btn-outline-primary" value="今月({{ now.month }}月)へ戻る">
+    </form>
+</div>
 
 <!-- カレンダー本体 -->
 <table class="table">
@@ -87,15 +89,5 @@
     {% endfor %}
     </tbody>
 </table>
-
-{% if user.is_employer %}
-    <form action='{% url 'shift:employer' month_current.year month_current.month %}'>
-        <input type="submit" value="雇用者用設定画面へ移行">
-    </form>
-{% else %}
-    <form action='{% url 'shift:employee' month_current.year month_current.month%}'>
-        <input type="submit" value="被雇用者用設定画面へ移行">
-    </form>
-{% endif %}
 
 {% endblock %}

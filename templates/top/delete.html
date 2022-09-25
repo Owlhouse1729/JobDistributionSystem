@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'top/base.html' %}
+
+{% block content %}
 
 <form method="post">
     {% csrf_token %}
@@ -12,8 +8,4 @@
     <input type="submit" value="削除する">
 </form>
 
-<form action="{% url 'top:edit' %}">
-    <input type="submit" value="戻る">
-</form>
-</body>
-</html>
+{% endblock %}
