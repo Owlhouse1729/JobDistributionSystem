@@ -1,3 +1,35 @@
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+html {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+
+.btn,
+a.btn,
+button.btn {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  color: #212529;
+  border-radius: 0.5rem;
+}
+
 .under-nav {
     margin-top: 60px;
 }
@@ -27,4 +59,51 @@
     margin-right: auto;
     margin-left: auto;
     width: fit-content;
+}
+
+.btn--center {
+    text-align: center;
+}
+
+.btn--right {
+    text-align: right;
+}
+
+.btn--blue {
+  font-size: 1.6rem;
+  font-weight: 700;
+  padding: 1rem 4rem;
+  color: darkslateblue;
+  background-color: white;
+  border-color: deepskyblue;
+  border-style: groove;
+  border-width: thin;
+  border-bottom: 5px solid slategrey;
+  -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+}
+.btn--blue:hover {
+  margin-top: 3px;
+  color: white;
+  background: linear-gradient(135deg, deepskyblue, slateblue);
+  border-color: white;
+  border-style: groove;
+  border-width: thin;
+  border-bottom: 2px solid slategrey;
+}
+
+.btn--rainbow {
+    font-size: 1.6rem;
+    font-weight: 700;
+    padding: 1rem 4rem;
+    color: black;
+    background: white;
+    border-width: thin;
+    border-style: groove;
+    border-color: deepskyblue;
+}
+
+.btn--rainbow:hover {
+    color: white;
+    background: linear-gradient(to right,#e60000,#f39800,#fff100,#009944,#0068b7,#1d2088,#920783);
 }

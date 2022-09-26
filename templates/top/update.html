@@ -2,14 +2,29 @@
 
 {% block content %}
 
+<div class="btn--center">
 <p class="page-title">
-    {{ user.username }} の 編集用ページ
+    {{ updating_user.username }} の 編集用ページ
 </p>
 
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="更新">
+    <label>
+        ユーザーネーム
+        <input type="text" placeholder="username" name="username" value="{{ updating_user.username }}">
+    </label>
+    <br>
+    <label>
+        雇用者か否か（従業員ならチェックを外す）
+        {% if updating_user.is_employer %}
+            <input type="checkbox" value="is_employer" name="is_employer" checked>
+        {% else %}
+            <input type="checkbox" value="is_employer" name="is_employer">
+        {% endif %}
+    </label>
+    <br>
+    <input type="submit" name="update" class="btn btn--blue" value="更新">
 </form>
+</div>
 
 {% endblock %}

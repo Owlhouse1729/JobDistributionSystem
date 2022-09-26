@@ -21,8 +21,24 @@
     </form>
 </div>
 
+{% if generate_status %}
+<div class="btn--right">
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="submit" class="btn btn--rainbow" value="シフトの自動割り振り" name="allot">
+</form>
+</div>
+{% else %}
+<div class="btn--right">
+    <label>
+    シフトの有効化が済んでいません。有効化はこちらから:
+    <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:assign' month_current.year month_current.month %}" role="button">シフト有効化</a>
+    </label>
+</div>
+{% endif %}
+
 <!-- カレンダーのフォーム -->
-<form method="post">
+<form method="post" id="calendar">
 {% csrf_token %}
 
 <!-- カレンダー本体 -->
@@ -125,14 +141,12 @@
     </tbody>
 </table>
 
-<input type="submit" name="confirm" value="シフトのConfirm">
 </form>
 
 {% if generate_status %}
-<form action="" method="post">
-    {% csrf_token %}
-    <input type="submit" value="シフトの自動割り振り" name="allot">
-</form>
+<div class="btn--center">
+<input type="submit" class="btn btn--blue" name="confirm" value="シフトのConfirm" form="calendar">
+</div>
 {% endif %}
 
 {% endblock %}

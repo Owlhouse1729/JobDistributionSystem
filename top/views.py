@@ -48,11 +48,29 @@ class Edit(OnlyEmployerMixin, TemplateView):
         return context
 
 
-class Update(OnlyEmployerMixin, UpdateView):
-    model = User
+class Update(OnlyEmployerMixin, TemplateView):
     template_name = 'top/update.html'
-    fields = ['username', 'is_employer']
-    success_url = reverse_lazy('top:edit')
+    model = User
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        context['updating_user'] = User.objects.filter(pk=self.kwargs.get('pk')).get()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('update'):
+            updating_user = User.objects.filter(pk=self.kwargs.get('pk')).get()
+            username = request.POST.get('username')
+            updating_user.username = username
+            print(request.POST)
+            is_employer = request.POST.get('is_employer')
+            if is_employer:
+                updating_user.is_employer = True
+            else:
+                updating_user.is_employer = False
+            updating_user.save()
+        return redirect('top:edit')
 
 
 class Delete(OnlyEmployerMixin, DeleteView):

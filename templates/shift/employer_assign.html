@@ -15,8 +15,17 @@
     </form>
 </div>
 
+{% if not generate_status %}
+<div class="btn--right">
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="submit" class="btn btn--rainbow" value="シフトの生成" name="generate">
+</form>
+</div>
+{% endif %}
+
 <!-- カレンダーのフォーム -->
-<form method="post">
+<form method="post" id="calendar">
 {% csrf_token %}
 
 <!-- カレンダー本体 -->
@@ -84,17 +93,10 @@
     {% endfor %}
     </tbody>
 </table>
-
-<input type="submit" name="confirm" value="Confirm Assign">
 </form>
 
-{% if not generate_status %}
-<form action="" method="post">
-    {% csrf_token %}
-    <input type="submit" value="シフトの生成" name="generate">
-</form>
-{% endif %}
-
-
+<div class="btn--center">
+<input type="submit" class="btn btn--blue btn--cubic" name="confirm" value="シフトの有効化を完了する" form="calendar">
+</div>
 
 {% endblock %}

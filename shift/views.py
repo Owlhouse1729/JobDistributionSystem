@@ -97,7 +97,7 @@ class EmployerAssign(Employer):
                 master_shift.save()
         elif request.POST.get('generate'):
             self.generate(self.get_current_month())
-        return redirect('shift:assign', year=year, month=month)
+        return redirect('shift:index', year=year, month=month)
 
 
 class Employee(Index):
