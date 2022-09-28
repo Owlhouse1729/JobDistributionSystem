@@ -46,7 +46,7 @@
     <thead>
     <tr>
         {% for w in week_names %}
-            <th>{{ w }}</th>
+            <th style="width: 12%">{{ w }}</th>
         {% endfor %}
     </tr>
     </thead>
@@ -67,7 +67,7 @@
                 {% else %}
 
                     <!-- 日付 -->
-                    <p>{{ day.day }}</p>
+                    <h5>{{ day.day }}</h5>
 
                     <!-- シフト -->
                     {% for shift in week_shifts %}

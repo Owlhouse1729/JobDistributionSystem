@@ -25,8 +25,9 @@ class Logout(LogoutView):
     template_name = 'top/logout.html'
 
 
-class Register(CreateView):
+class Register(OnlyEmployerMixin, CreateView):
     template_name = 'top/register.html'
+    model = User
     form_class = RegisterForm
 
     def form_valid(self, form):
