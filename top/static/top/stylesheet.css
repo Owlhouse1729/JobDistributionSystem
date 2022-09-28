@@ -153,3 +153,9 @@ h3 {
     background: #f4f4f4;
     margin: 10px auto auto;
 }
+
+input {
+    box-sizing:border-box;
+    -moz-box-sizing:border-box; /* Firefox */
+    -webkit-box-sizing:border-box; /* Chrome, Safari */
+}
