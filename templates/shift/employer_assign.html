@@ -23,8 +23,6 @@
 {% endif %}
 
 <!-- カレンダーのフォーム -->
-<form method="post" id="calendar">
-{% csrf_token %}
 
 <!-- カレンダー本体 -->
 <table class="table">
@@ -59,6 +57,8 @@
                             {% if master_shift.date == day %}
 
                                 <!-- コマ -->
+                                <form class="form-check form-switch" method="post" id="calendar">
+                                {% csrf_token %}
                                 {% if master_shift.is_am %}
                                     {% csrf_token %}
                                     <div>
@@ -79,6 +79,7 @@
                                     {% endif %}
                                     </div>
                                 {% endif %}
+                                </form>
 
                             {% endif %}
                         {% endfor %}
@@ -91,7 +92,7 @@
     {% endfor %}
     </tbody>
 </table>
-</form>
+
 
 <div class="btn--center">
 <input type="submit" class="btn btn--blue btn--cubic" name="confirm" value="シフトの有効化を完了する" form="calendar">

@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.views.generic import *
 from top.models import User
 from top.mixins import OnlyEmployerMixin
-
 # Create your views here.
 
 

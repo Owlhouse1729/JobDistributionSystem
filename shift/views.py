@@ -101,7 +101,7 @@ class EmployerAssign(Employer):
         return redirect('shift:index', year=year, month=month)
 
 
-class Employee(Index):
+class Employee(TableGeneratorMixin, TemplateView):
     template_name = 'shift/employee.html'
 
     def get_context_data(self, **kwargs):
