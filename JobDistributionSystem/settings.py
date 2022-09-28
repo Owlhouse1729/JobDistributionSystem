@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-by5m94g%tj3a%yqe0xotuw(p@l3uvkv@&#y8ol*!gkllqziku#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 # Application definition
@@ -155,4 +155,3 @@ if not DEBUG:
     )
 
     django_heroku.settings(locals())
-    

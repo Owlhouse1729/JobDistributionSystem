@@ -8,7 +8,7 @@
     <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:assign' month_previous.year month_previous.month %}" role="button">前月</a>
     <span class="fs-1">{{ month_current | date:"Y年m月" }}</span>
     <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:assign' month_next.year month_next.month %}" role="button">次月</a>
-    <form action='{% url 'shift:employer' now.year now.month %}'>
+    <form action='{% url 'shift:assign' now.year now.month %}'>
         <input type="submit" class="btn btn-outline-primary" value="今月({{ now.month }}月)へ戻る">
     </form>
 </div>
