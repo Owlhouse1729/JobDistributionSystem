@@ -23,6 +23,8 @@
 {% endif %}
 
 <!-- カレンダーのフォーム -->
+<form method="post">
+{% csrf_token %}
 
 <!-- カレンダー本体 -->
 <table class="table">
@@ -57,34 +59,28 @@
                             {% if master_shift.date == day %}
 
                                 <!-- コマ -->
-                                <form class="form-check form-switch" method="post" id="calendar">
-                                {% csrf_token %}
                                 {% if master_shift.is_am %}
-                                    {% csrf_token %}
                                     <div>
-                                    <label class="form-check-label">AM</label>
                                     {% if master_shift.required %}
-                                        <input class="form-check-input" type="checkbox" name="check[]" value="{{ master_shift.pk }}" checked="checked">
+                                        <input type="checkbox" name="check[]" value="{{ master_shift.pk }}" checked="checked">
                                     {% else %}
-                                        <input class="form-check-input" type="checkbox" name="check[]" value="{{ master_shift.pk }}">
+                                        <input type="checkbox" name="check[]" value="{{ master_shift.pk }}">
                                     {% endif %}
+                                    AM
                                     </div>
                                 {% else %}
                                     <div>
-                                    <label class="form-check-label">PM</label>
                                     {% if master_shift.required %}
-                                        <input class="form-check-input" type="checkbox" name="check[]" value="{{ master_shift.pk }}" checked="checked">
+                                        <input type="checkbox" name="check[]" value="{{ master_shift.pk }}" checked="checked">
                                     {% else %}
-                                        <input class="form-check-input" type="checkbox" name="check[]" value="{{ master_shift.pk }}">
+                                        <input type="checkbox" name="check[]" value="{{ master_shift.pk }}">
                                     {% endif %}
+                                    PM
                                     </div>
                                 {% endif %}
-                                </form>
-
                             {% endif %}
                         {% endfor %}
                     {% endfor %}
-
                 {% endif %}
             </td>
             {% endfor %}
@@ -93,9 +89,11 @@
     </tbody>
 </table>
 
-
 <div class="btn--center">
-<input type="submit" class="btn btn--blue btn--cubic" name="confirm" value="シフトの有効化を完了する" form="calendar">
+<input type="submit" class="btn btn--blue btn--cubic" name="confirm" value="シフトの有効化を完了する">
 </div>
+
+</form>
+
 
 {% endblock %}
