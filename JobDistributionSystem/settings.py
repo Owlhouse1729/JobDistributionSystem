@@ -157,3 +157,4 @@ if not DEBUG:
     ALLOWED_HOSTS = ['*']
 
     django_heroku.settings(locals())
+    # からプッシュ用文字列
