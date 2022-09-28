@@ -1,1 +1,1 @@
-"web: gunicorn JobDistributionSystem.wsgi --log-file -" 
+web: gunicorn JobDistributionSystem.wsgi --log-file -
