@@ -97,6 +97,7 @@ class EmployerAssign(Employer):
                 master_shift.save()
         elif request.POST.get('generate'):
             self.generate(self.get_current_month())
+            return redirect('shift:assign', year=year, month=month)
         return redirect('shift:index', year=year, month=month)
 
 
@@ -105,8 +106,11 @@ class Employee(Index):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        calendar_context = self.get_month_calendar()
+        context.update(calendar_context)
         context.update({
-            'personal_shifts': PersonalShift.objects.filter(owner=self.request.user)
+            'personal_shifts': PersonalShift.objects.filter(owner=self.request.user),
+            'generate_status': self.is_generated(self.get_current_month())
         })
         return context
 

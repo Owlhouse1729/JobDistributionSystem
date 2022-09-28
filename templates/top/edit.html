@@ -2,43 +2,45 @@
 
 {% block content %}
 
-現在ログイン中: {{ user }}
-
 <p class="page-title">
-従業員の編集
+ユーザーの編集
 </p>
 
 
-<h2 style="text-align: center">現在の従業員</h2>
-<table class="edit">
-    <tr>
-        <th>name</th>
-        <th>編集</th>
-        <th>削除</th>
-    </tr>
-{% for employee in employees %}
-    <tr>
-        <td>{{ employee.username }}</td>
-        <th><a href="{% url 'top:update' employee.pk %}">編集</a></th>
-        <th><a href="{% url 'top:delete' employee.pk %}">削除</a></th>
-    </tr>
-{% endfor %}
-</table>
+<h4 class="text-center mt-3">現在の従業員</h4>
+<div class="container">
+    <table class="table table-striped">
+        <tr class="table-danger">
+            <th>name</th>
+            <th>編集</th>
+            <th>削除</th>
+        </tr>
+    {% for employee in employees %}
+        <tr>
+            <td>{{ employee.username }}</td>
+            <th><a class="btn btn-info" href="{% url 'top:update' employee.pk %}">編集</a></th>
+            <th><a class="btn btn-danger" href="{% url 'top:delete' employee.pk %}">削除</a></th>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
 
-<h2 style="text-align: center">現在の管理者</h2>
-<table class="edit">
-    <tr>
-        <th>name</th>
-        <th>編集</th>
-        <th>削除</th>
-    </tr>
-{% for employer in employers %}
-    <tr>
-        <td>{{ employer.username }}</td>
-        <th><a href="{% url 'top:update' employer.pk %}">編集</a></th>
-        <th><a href="{% url 'top:delete' employer.pk %}">削除</a></th>
-    </tr>
-{% endfor %}
-</table>
+<h4 class="text-center mt-3">現在の管理者</h4>
+<div class="container">
+    <table class="table table-striped">
+        <tr class="table-info">
+            <th>name</th>
+            <th>編集</th>
+            <th>削除</th>
+        </tr>
+    {% for employer in employers %}
+        <tr>
+            <td>{{ employer.username }}</td>
+            <th><a class="btn btn-info" href="{% url 'top:update' employer.pk %}">編集</a></th>
+            <th><a class="btn btn-danger" href="{% url 'top:delete' employer.pk %}">削除</a></th>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
 
 {% endblock %}

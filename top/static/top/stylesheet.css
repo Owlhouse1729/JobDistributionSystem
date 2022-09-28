@@ -26,7 +26,6 @@ button.btn {
   text-align: center;
   vertical-align: middle;
   text-decoration: none;
-  color: #212529;
   border-radius: 0.5rem;
 }
 
@@ -39,11 +38,9 @@ button.btn {
 }
 
 .page-title {
-    font-size: 2rem;
-    margin-right: auto;
-    margin-left: auto;
+    font-size: 3rem;
     width: fit-content;
-    text-decoration: underline;
+    margin: auto;
 }
 
 .futodoki {
@@ -82,6 +79,7 @@ button.btn {
   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
   box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
 }
+
 .btn--blue:hover {
   margin-top: 3px;
   color: white;
@@ -106,4 +104,52 @@ button.btn {
 .btn--rainbow:hover {
     color: white;
     background: linear-gradient(to right,#e60000,#f39800,#fff100,#009944,#0068b7,#1d2088,#920783);
+}
+
+h2 {
+  padding: 1rem 2rem;
+  border-left: 5px solid lightskyblue;
+  background: #f4f4f4;
+}
+
+.tutorial-text {
+    text-indent: 1em;
+}
+
+h1 {
+  position: relative;
+  overflow: hidden;
+  padding: 1.5rem 2rem 1.5rem 130px;
+  border: 2px solid darkgray;
+}
+
+h1:before {
+  position: absolute;
+  top: -150%;
+  left: -100px;
+  width: 200px;
+  height: 300%;
+  content: '';
+  -webkit-transform: rotate(25deg);
+  transform: rotate(25deg);
+  background: lightskyblue;
+}
+
+h1 span {
+  font-size: 4rem;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  display: block;
+  padding-top: 3px;
+  padding-left: 16px;
+  color: #fff;
+}
+
+h3 {
+    padding: 1rem 2rem;
+    border-bottom: 3px dotted #000;
+    background: #f4f4f4;
+    margin: 10px auto auto;
 }

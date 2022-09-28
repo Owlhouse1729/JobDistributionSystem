@@ -2,9 +2,7 @@
 
 {% block content %}
 
-<p class="page-title">
-シフトの有効化
-</p>
+<p class="page-title">シフトの有効化</p>
 
 <div class="container-fluid text-center col-6">
     <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:assign' month_previous.year month_previous.month %}" role="button">前月</a>
@@ -46,7 +44,6 @@
                         {% else %}
                     <td>
                 {% endif %}
-
             <p>
                 <!-- カレンダーの表示 -->
                 {% if month_current.month != day.month %}
@@ -63,23 +60,24 @@
 
                                 <!-- コマ -->
                                 {% if master_shift.is_am %}
-                                    <p>
-                                        AM
-                                        {% if master_shift.required %}
-                                            <input type="checkbox" name="check[]" value="{{ master_shift.pk }}" checked="checked">
-                                        {% else %}
-                                            <input type="checkbox" name="check[]" value="{{ master_shift.pk }}">
-                                        {% endif %}
-                                    </p>
+                                    {% csrf_token %}
+                                    <div>
+                                    <label class="form-check-label">AM</label>
+                                    {% if master_shift.required %}
+                                        <input class="form-check-input" type="checkbox" name="check[]" value="{{ master_shift.pk }}" checked="checked">
+                                    {% else %}
+                                        <input class="form-check-input" type="checkbox" name="check[]" value="{{ master_shift.pk }}">
+                                    {% endif %}
+                                    </div>
                                 {% else %}
-                                    <p>
-                                        PM
-                                        {% if master_shift.required %}
-                                            <input type="checkbox" name="check[]" value="{{ master_shift.pk }}" checked="checked">
-                                        {% else %}
-                                            <input type="checkbox" name="check[]" value="{{ master_shift.pk }}">
-                                        {% endif %}
-                                    </p>
+                                    <div>
+                                    <label class="form-check-label">PM</label>
+                                    {% if master_shift.required %}
+                                        <input class="form-check-input" type="checkbox" name="check[]" value="{{ master_shift.pk }}" checked="checked">
+                                    {% else %}
+                                        <input class="form-check-input" type="checkbox" name="check[]" value="{{ master_shift.pk }}">
+                                    {% endif %}
+                                    </div>
                                 {% endif %}
 
                             {% endif %}

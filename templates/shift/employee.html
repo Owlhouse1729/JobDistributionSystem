@@ -2,6 +2,12 @@
 
 {% block content %}
 
+<div class="page-title">
+<p>
+    シフト希望記入
+</p>
+</div>
+
 <div class="container-fluid text-center col-6">
     <a class="fs-5 btn btn-outline-primary" href="{% url 'shift:employee' month_previous.year month_previous.month %}" role="button">前月</a>
     <span class="fs-1">{{ month_current | date:"Y年m月" }}</span>
@@ -10,7 +16,8 @@
         <input type="submit" class="btn btn-outline-primary" value="今月({{ now.month }}月)へ戻る">
     </form>
 </div>
-<!-- カレンダーのフォーム --><form method="post">
+<!-- カレンダーのフォーム -->
+<form method="post" id="calendar">
 {% csrf_token %}
 
 <!-- カレンダー本体 -->
@@ -94,8 +101,18 @@
     {% endfor %}
     </tbody>
 </table>
-
-<input type="submit" name="confirm" value="シフト希望のConfirm">
 </form>
+
+{% if generate_status %}
+<div class="btn--center">
+<input type="submit" name="confirm" class="btn btn--blue" value="シフト希望のConfirm" form="calendar">
+</div>
+{% else %}
+<div class="btn--center">
+<p class="futodoki">
+    シフト生成が行われていません。生成が行われるまでお待ちください。
+</p>
+</div>
+{% endif %}
 
 {% endblock %}
