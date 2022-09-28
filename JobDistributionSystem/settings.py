@@ -155,4 +155,3 @@ if not DEBUG:
     )
 
     django_heroku.settings(locals())
-    
