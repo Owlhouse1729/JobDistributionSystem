@@ -164,7 +164,7 @@ class TableGeneratorMixin(MonthWithShiftsMixin):
         masters = MasterShift.objects.filter(shift_table=table, required=True, worker=None)
         for master in masters:
             personal_shifts = PersonalShift.objects.filter(master=master, is_wanted=True)
-            # personal_dict = {mkazu: 今月3コマ, tkmn: 今月2コマ...} ただし、労働者はmasterに出勤できる者だけ
+            # shift_count = {mkazu: 今月3コマ, tkmn: 今月2コマ...} ただし、労働者はmasterに出勤できる者だけ
             shift_count = {personal.owner: masters.filter(worker=personal.owner).count() for personal in personal_shifts}
             if shift_count:
                 min_shift_count = min(shift_count.values())

@@ -34,11 +34,13 @@
             <th>削除</th>
         </tr>
     {% for employer in employers %}
+        {% if not employer.is_superuser %}
         <tr>
             <td>{{ employer.username }}</td>
             <th><a class="btn btn-info" href="{% url 'top:update' employer.pk %}">編集</a></th>
             <th><a class="btn btn-danger" href="{% url 'top:delete' employer.pk %}">削除</a></th>
         </tr>
+        {% endif %}
     {% endfor %}
     </table>
 </div>
